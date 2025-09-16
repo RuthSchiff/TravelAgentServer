@@ -69,5 +69,5 @@ app.MapPost("/chat", async (ChatRequest req, ConversationManager conversationMan
     return Results.Ok(new { response = response });
 });
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.Run();
