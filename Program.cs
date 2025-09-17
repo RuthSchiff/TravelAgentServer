@@ -67,4 +67,4 @@ app.MapPost("/chat", async (ChatRequest req, ConversationManager conversationMan
 });
 
 //app.UseHttpsRedirection();
-app.Run();
+app.Run("http://0.0.0.0:" + Environment.GetEnvironmentVariable("PORT"));
