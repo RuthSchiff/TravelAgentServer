@@ -12,12 +12,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 // äåñôú ùéøåú CORS
+// הוספת שירות CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp",
         builder =>
         {
-            builder.WithOrigins("http://localhost:3000")
+            builder.WithOrigins("http://localhost:3000", "https://travelagentserver.onrender.com")
                    .AllowAnyHeader()
                    .AllowAnyMethod();
         });
