@@ -3,22 +3,21 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using travelAgent.classes;
 using Microsoft.OpenApi.Models;
-using DotNetEnv; // äåñó àú äùåøä äæå
+using DotNetEnv; // הוסף את השורה הזו
 
-DotNetEnv.Env.Load(); // äòáø àú äùåøä äæå ìëàï
+DotNetEnv.Env.Load(); // העבר את השורה הזו לכאן
     
 var builder = WebApplication.CreateBuilder(args);
 
 
 
-// äåñôú ùéøåú CORS
 // הוספת שירות CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowReactApp",
+    options.AddPolicy("AllowAllOrigins",
         builder =>
         {
-            builder.WithOrigins("http://localhost:3000", "https://travelagentserver.onrender.com")
+            builder.AllowAnyOrigin()
                    .AllowAnyHeader()
                    .AllowAnyMethod();
         });
@@ -36,7 +35,7 @@ builder.Services.AddSingleton(new GenerativeModel(geminiApiKey, "gemini-1.5-flas
 builder.Services.AddMemoryCache();
 builder.Services.AddHttpClient();
 
-// øéùåí ùéøåúéí îåúàîéí àéùéú
+// רישום שירותים מותאמים אישית
 builder.Services.AddScoped<WeatherService>(provider =>
     new WeatherService(
         provider.GetRequiredService<HttpClient>(),
@@ -58,8 +57,9 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "TravelAgent API V1");
 });
 
-// äôòìú CORS
-app.UseCors("AllowReactApp");
+// הפעלת CORS
+app.UseCors("AllowAllOrigins");
+//app.UseCors("AllowReactApp");
 
 app.MapPost("/chat", async (ChatRequest req, ConversationManager conversationManager) =>
 {
@@ -68,4 +68,4 @@ app.MapPost("/chat", async (ChatRequest req, ConversationManager conversationMan
 });
 
 //app.UseHttpsRedirection();
-app.Run("http://0.0.0.0:" + Environment.GetEnvironmentVariable("PORT"));
+app.Run();
