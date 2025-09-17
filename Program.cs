@@ -3,15 +3,15 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using travelAgent.classes;
 using Microsoft.OpenApi.Models;
-using DotNetEnv; // äåñó àú äùåøä äæå
+using DotNetEnv; // Ã¤Ã¥Ã±Ã³ Ã Ãº Ã¤Ã¹Ã¥Ã¸Ã¤ Ã¤Ã¦Ã¥
 
-DotNetEnv.Env.Load(); // äòáø àú äùåøä äæå ìëàï
+DotNetEnv.Env.Load(); // Ã¤Ã²Ã¡Ã¸ Ã Ãº Ã¤Ã¹Ã¥Ã¸Ã¤ Ã¤Ã¦Ã¥ Ã¬Ã«Ã Ã¯
     
 var builder = WebApplication.CreateBuilder(args);
 
 
 
-// äåñôú ùéøåú CORS
+// Ã¤Ã¥Ã±Ã´Ãº Ã¹Ã©Ã¸Ã¥Ãº CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp",
@@ -35,7 +35,7 @@ builder.Services.AddSingleton(new GenerativeModel(geminiApiKey, "gemini-1.5-flas
 builder.Services.AddMemoryCache();
 builder.Services.AddHttpClient();
 
-// øéùåí ùéøåúéí îåúàîéí àéùéú
+// Ã¸Ã©Ã¹Ã¥Ã­ Ã¹Ã©Ã¸Ã¥ÃºÃ©Ã­ Ã®Ã¥ÃºÃ Ã®Ã©Ã­ Ã Ã©Ã¹Ã©Ãº
 builder.Services.AddScoped<WeatherService>(provider =>
     new WeatherService(
         provider.GetRequiredService<HttpClient>(),
@@ -51,16 +51,13 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "TravelAgent API V1");
-    });
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "TravelAgent API V1");
+});
 
-// äôòìú CORS
+// Ã¤Ã´Ã²Ã¬Ãº CORS
 app.UseCors("AllowReactApp");
 
 app.MapPost("/chat", async (ChatRequest req, ConversationManager conversationManager) =>
